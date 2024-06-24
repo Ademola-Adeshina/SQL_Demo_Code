@@ -1,2 +1,3 @@
 SELECT CONCAT(Units,Number) as Item_date
 FROM `seismic-operand-424515-h8.Demo.Data_for_cleaning`
+# I will make the code more complete later
