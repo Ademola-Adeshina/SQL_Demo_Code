@@ -1,0 +1,11 @@
+SELECT
+  dept.name,
+  dept.department_id,
+  employ.name,
+  employ.role
+FROM 
+  `seismic-operand-424515-h8.Employee_data.department` AS dept
+INNER JOIN
+  `seismic-operand-424515-h8.Employee_data.employment` AS employ
+  ON
+    dept.department_id =employ.department_id
