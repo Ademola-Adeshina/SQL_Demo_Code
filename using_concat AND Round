@@ -1,0 +1,11 @@
+SELECT
+  usertype,
+  concat(start_station_name,  " TO "  ,end_station_name) as Route,
+  count(*) as num_trips,
+  ROUND(AVG(cast(tripduration as int64)/60),2) as Duration
+ FROM
+  `bigquery-public-data.new_york_citibike.citibike_trips`
+ GROUP BY
+  start_station_name, end_station_name, usertype
+order by
+  num_trips
