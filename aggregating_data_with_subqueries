@@ -1,0 +1,26 @@
+SELECT
+	warehouse.warehouse_id,
+    CONCAT(warehouse.state,' :' , warehouse_alias) AS warehouse_name,
+    COUNT(orders.order_id) AS number_of_orders,
+    (SELECT
+		COUNT(*)
+	FROM  
+		`order`.`orders - orders` as orders ) AS total_orders,
+CASE
+	WHEN COUNT(orders.order_id)/(SELECT COUNT(*) FROM `order`.`orders - orders` as orders) <= 0.20
+    THEN "fulfilled 0-20% of orders"
+    WHEN COUNT(orders.order_id)/(SELECT COUNT(*)  FROM `order`.`orders - orders` as orders) > 0.20
+    AND COUNT(orders.order_id)/ (SELECT COUNT(*) FROM `order`.`orders - orders` as orders) <= 0.60
+    THEN "fulfilled 21 - 60% of orders"
+ELSE "fulfiled more than 60% of orders"
+END AS fulfillment_summary
+FROM 
+	`order`.`warehouse - warehouse` AS warehouse
+LEFT JOIN
+	`order`.`orders - orders` AS orders
+ON	
+	orders.warehouse_id = warehouse.warehouse_id
+GROUP BY
+	warehouse.warehouse_id, warehouse_name
+HAVING
+	COUNT(orders.order_id) > 0;
